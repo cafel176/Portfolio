@@ -2,8 +2,8 @@
 A personal Portfolio project. <br>
 This is the data management system, focusing on storing and editing data.<br>
 Different users have different priorities。<br>
-Name: admin  Password: password    to login as the main administrator<br>
-Name: guest  Password: guest    to log in as a guest<br>
+<b>Name:</b> admin  <b>Password:</b> password   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  to login as the main administrator<br>
+<b>Name:</b> guest  <b>Password:</b> guest  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  to login as a guest<br>
 <a href="https://cafel.edinburgh.domains/portfolio/public/admin"><b>Click here to visit</b></a><br/>
 <br>
 I mainly use jquery and bootstrap to build the HTML web page.<br>

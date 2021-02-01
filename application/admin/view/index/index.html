@@ -1,0 +1,68 @@
+{extend name="common/base"/}
+
+{block name="content"}
+<div class="row" style="">
+        <div class="col-md-12 box-admin">
+                <div class="page-breadcrumbs">
+                        <div class="breadcrumb" style="display:block;">
+                                <h1 style="display:inline-block;">{$Think.lang.index_welcome} {$user}</h1>
+                                <span style="color:#FFF;display:inline-block;float:right;vertical-align:middle;" >
+                                        <a href="{:url('/adminindex/lang',['language'=>'zh-cn'])}" ><img  alt="chinese" src="/__PATH__/__IMAGES__/cn.png"></a>
+                                        <a href="{:url('/adminindex/lang',['language'=>'en-us'])}" ><img  alt="english" src="/__PATH__/__IMAGES__/uk.jpg"></a>
+                                </span>
+                        </div>
+                </div>
+                <div class="widget">
+                        <div class="widget-body">
+                                <div id="card-319781">
+                                        <div class="card">
+                                                {volist name="indexdata" id="value"}
+                                                <div class="card-header">
+                                                        <a class="card-link" data-toggle="collapse" data-parent="#card-319781" href="#card-element-{$key}">{$key}</a>
+                                                </div>
+                                                <div id="card-element-{$key}" class="collapse show">
+                                                        <div class="card-body">
+                                                                <table class="table table-bordered table-hover">
+                                                                        <thead>
+                                                                        <tr>
+                                                                                {volist name="value.struct" id="val"}
+                                                                                {if condition="in_array($val.COLUMN_NAME,['limit','canedit']) && $limits!='all'"}
+                                                                                {else /}
+                                                                                <th>
+                                                                                        {$val.COLUMN_NAME}
+                                                                                </th>
+                                                                                {/if}
+                                                                                {/volist}
+                                                                        </tr>
+                                                                        </thead>
+                                                                        <tbody>
+
+                                                                                {volist name="value.list" id="val"}
+                                                                                <tr>
+                                                                                {volist name="val" id="element"}
+                                                                                {if condition="in_array($key,['limit','canedit']) && $limits!='all'"}
+                                                                                {else /}
+                                                                                <td>
+                                                                                        {$element}
+                                                                                </td>
+                                                                                {/if}
+                                                                                {/volist}
+                                                                                </tr>
+                                                                                {/volist}
+
+                                                                        </tbody>
+                                                                </table>
+                                                        </div>
+                                                </div>
+                                                {/volist}
+                                        </div>
+                                </div>
+                        </div>
+                </div>
+        </div>
+</div>
+{/block}
+
+{block name="script"}
+
+{/block}

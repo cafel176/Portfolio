@@ -1,0 +1,216 @@
+{extend name="common/base"/}
+
+{block name="content"}
+
+<div class="row">
+    <div class="col-md-12 box-admin">
+        <div class="page-breadcrumbs">
+            <ul class="breadcrumb">
+                <li><h1>{$listtable}</h1></li>
+            </ul>
+        </div>
+                    <div class="col-md-12 searchBar">
+                        <form class="form-inline" action="{:url('/otherlist',['top'=>$top,'group'=>$group,'listtable'=>$listtable])}" method="post">
+                            <label class="form-inline" for="searchtype">
+                                {$Think.lang.system_searchType}
+                                <div class="dropdown form-control inline-margin" style="border: unset">
+                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown">id</button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    {volist name="structtype" id="struct"}
+                                    {switch name="$struct.COLUMN_NAME" }
+                                    {case value=""}{/case}
+                                    {default /}
+                                    <a class="dropdown-item" href ="javascript:void(0);" onclick ="setSearchType('{$struct.COLUMN_NAME}');">{$struct.COLUMN_NAME}</a>
+                                    {/switch}
+                                    {/volist}
+                                </div>
+                            </div>
+                            </label>
+                            <input id="searchtype" style="display: none" value="id" type="text" name="filter_type"/>
+                            <input id="searchtext" class="form-control mr-sm-2" type="text" name="filter_text" />
+                            <button class="btn btn-success my-2 my-sm-0 inline-margin" onclick ="setSearchText();" type="submit">
+                                {$Think.lang.system_search}
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div id="card-285747">
+                            {volist name="list" id="val"}
+                            <div class="card">
+                                <div class="card-header">
+                                    {if condition="$val.id==0"}
+                                    <a class="collapsed card-link" data-toggle="collapse" data-parent="#card-285747" href="#other-element-{$val.id}">{$Think.lang.system_new}</a>
+                                    {else /}
+                                    <a class="collapsed card-link" data-toggle="collapse" data-parent="#card-285747" href="#other-element-{$val.id}">id: {$val.id} name: {$val.name}</a>
+                                    {/if}
+                                </div>
+                                {if condition="$val.id==0"}
+                                <div id="other-element-{$val.id}" class="collapse">
+                                {else /}
+                                <div id="other-element-{$val.id}" class="collapse show">
+                                {/if}
+                                        <div class="card-body">
+                                            <form role="form" action="{:url('/otherlist/change',['top'=>$top,'group'=>$group,'id'=>$val.id,'listtable'=>$listtable])}" method="post">
+
+                                                {assign name="mid" value="$val.id"/}
+
+                                                {volist name="val" id="element"}
+                                                {assign name="IS_NULLABLE" value="YES"/}
+                                                {assign name="valkey" value="$key"/}
+                                                {volist name="structtype" id="st"}
+                                                {if condition="$st.COLUMN_NAME==$valkey && $st.IS_NULLABLE=='NO'"}
+                                                {assign name="IS_NULLABLE" value="NO"/}
+                                                {/if}
+                                                {/volist}
+                                                {switch name="$valkey" }
+                                                {case value="id|register_time"}{/case}
+
+                                                {case value="email"}
+                                                <div class="form-group">
+                                                    <label for="{$mid}-{$valkey}">
+                                                        {$valkey}
+                                                    </label>
+                                                    {if condition="$IS_NULLABLE=='NO'"}
+                                                    <input type="email" onblur="checkInput(this)" name="{$valkey}" class="form-control" id="{$mid}-{$valkey}" value="{$element}" placeholder="Input your email"/>
+                                                    {else /}
+                                                    <input type="email" name="{$valkey}" class="form-control" id="{$mid}-{$valkey}" value="{$element}" placeholder="Input your email"/>
+                                                    {/if}
+                                                </div>
+                                                {/case}
+
+                                                {case value="password"}
+                                                <div class="form-group">
+                                                    <label for="{$mid}-{$valkey}">
+                                                        {$valkey}
+                                                    </label>
+                                                    {if condition="$IS_NULLABLE=='NO'"}
+                                                    <input type="password" onblur="checkInput(this)" name="{$valkey}" class="form-control" id="{$mid}-{$valkey}" value="{$element}" placeholder="Input your password"/>
+                                                    {else /}
+                                                    <input type="password" name="{$valkey}" class="form-control" id="{$mid}-{$valkey}" value="{$element}" placeholder="Input your password"/>
+                                                    {/if}
+                                                </div>
+                                                {/case}
+
+                                                {default /}
+                                                <div class="form-group">
+                                                    <label for="{$mid}-{$valkey}">
+                                                        {$valkey}
+                                                    </label>
+                                                    {if condition="$IS_NULLABLE=='NO'"}
+                                                    <input type="text" onblur="checkInput(this)" name="{$valkey}" class="form-control" id="{$mid}-{$valkey}" value="{$element}" placeholder=""/>
+                                                    {else /}
+                                                    <input type="text" name="{$valkey}" class="form-control" id="{$mid}-{$valkey}" value="{$element}" placeholder=""/>
+                                                    {/if}
+                                                </div>
+                                                {/switch}
+                                                {/volist}
+
+                                                <div id="hint-{$mid}" class="d-none">
+                                                    {if condition="$success==0"}
+                                                    <div class="alert alert-danger alert-dismissible fade show">
+                                                        <button type="button" class="close" data-dismiss="alert">×</button>
+                                                        <strong>{$Think.lang.system_operate_fail}</strong>
+                                                    </div>
+                                                    {else /}
+                                                    <div class="alert alert-success alert-dismissible fade show">
+                                                        <button type="button" class="close" data-dismiss="alert">×</button>
+                                                        <strong>{$Think.lang.system_operate_success}</strong>
+                                                    </div>
+                                                    {/if}
+                                                </div>
+
+                                                {if condition="$mid==0"}
+                                                <button type="submit" class="btn btn-success inline-margin" onclick ="setScoll('hint-{$mid}');setSid({$mid});setChangeType('changetype-{$mid}','insert');">
+                                                    {$Think.lang.system_insert}
+                                                </button>
+                                                {else /}
+                                                <button type="submit" class="btn btn-primary inline-margin" onclick ="setScoll('hint-{$mid}');setSid({$mid});setChangeType('changetype-{$mid}','update');">
+                                                    {$Think.lang.system_update}
+                                                </button>
+
+                                                <button type="submit" class="btn btn-danger inline-margin" onclick ="setScoll('hint-{$mid}');setSid({$mid});setChangeType('changetype-{$mid}','delete');">
+                                                    {$Think.lang.system_delete}
+                                                </button>
+                                                {/if}
+
+                                                <input id="changetype-{$mid}" style="display: none" value="" type="text" name="changetype"/>
+                                            </form>
+                                        </div>
+                                </div>
+
+                            </div>
+                            {/volist}
+                        </div>
+                    </div>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+    <script type="text/javascript">
+        value = localStorage.getItem("otherlist.filter_type");
+        var type = (value == undefined || value == null) ? "id" : value
+        value = localStorage.getItem("otherlist.filter_text");
+        var text = (value == undefined || value == null) ? "" : value
+        value = localStorage.getItem("otherlist.scroll_pos");
+        var scroll_pos = (value == undefined || value == null) ? 0 : value
+        value = localStorage.getItem("otherlist.sid");
+        var sid = (value == undefined || value == null) ? -2 : value
+
+        if(sid==0)
+            document.getElementById('card-element-'+sid).className += ' show';
+
+        let obj = document.getElementById('hint-'+sid);
+        if(obj != undefined && obj != null)
+            obj.className = '';
+
+        setSid(-2);
+        scoll(scroll_pos);
+
+        function setSearchType(type)
+        {
+            document.getElementById('dropdownMenuButton').innerHTML = type;
+            document.getElementById('searchtype').value = type;
+            localStorage.setItem("otherlist.filter_type", type);
+        }
+
+        function setSearchText()
+        {
+            localStorage.setItem("otherlist.filter_text", document.getElementById( 'searchtext').value);
+        }
+
+        function setChangeType(id,type)
+        {
+            document.getElementById(id).value = type;
+        }
+
+        function setSid(id)
+        {
+            localStorage.setItem("otherlist.sid",id);
+        }
+
+        function setScoll(id)
+        {
+            let pos = document.documentElement.scrollTop;
+            localStorage.setItem("otherlist.scroll_pos",pos);
+        }
+
+        function scoll(pos)
+        {
+            window.scrollTo(0, pos);
+            localStorage.setItem("otherlist.scroll_pos",0);
+            return false;
+        }
+
+        function checkInput(dom)
+        {
+            let name = dom.getAttribute("name");
+            if(dom.value==""||dom.value=="empty" || dom.value==null)
+            {
+                alert(name+"不能为空和empty\n"+name+"can not be empty or null.");
+                dom.focus();
+            }
+        }
+    </script>
+{/block}

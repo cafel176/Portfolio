@@ -1,0 +1,406 @@
+{extend name="common/base"/}
+
+{block name="content"}
+
+<div class="row" style="">
+    <div class="col-md-12 box-admin">
+        <div id="card-205698">
+            <div class="card">
+                <div class="card-header">
+                    <a class="collapsed card-link" data-toggle="collapse" data-parent="#card-205698" href="#card-element-75684">{$Think.lang.list_editsub}</a>
+                </div>
+                <div id="card-element-75684" class="collapse">
+                    <div class="card-body">
+                        <div class="page-breadcrumbs">
+                            <ul class="breadcrumb">
+                                <li><h1>{$group}</h1></li>
+                            </ul>
+                        </div>
+                        <form role="form" action="{:url('/adminlist/change',['top'=>$top,'group'=>$group,'table'=>'_subgroup','search'=>$search])}" method="post">
+
+                            {volist name='subgroups' id='vo' key="k"}
+                                {if condition="$search==$k && ($vo.canedit==1 || $limits=='all')"}
+                                    {assign name="sub" value="$vo"/}
+                                {/if}
+                            {/volist}
+
+                            <label class="form-inline" for="searchName">
+                                {$Think.lang.list_subgroup}
+                                <div class="dropdown form-control inline-margin" style="border: unset">
+
+                                    <button class="btn btn-primary dropdown-toggle" type="button" id="searchName-dropdownMenuButton" data-toggle="dropdown">{notempty name='sub'}{$sub.name}{/notempty}</button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        {volist name="subgroups" id="subgroup" key="k"}
+                                        {if condition="$subgroup.canedit==1 || $limits=='all'"}
+                                        <a class="dropdown-item" href ="{:url('/adminlist',['top'=>$top,'group'=>$group,'search'=>$k])}">{$subgroup.name}</a>
+                                        {/if}
+                                        {/volist}
+                                    </div>
+                                </div>
+                            </label>
+
+                            <input id="searchName" style="display: none" value="{notempty name='sub'}{$sub.name}{/notempty}" type="text" name="searchName"/>
+
+                            {volist name="subgroupstruct" id="element" key="k"}
+                            {switch name="$element.COLUMN_NAME" }
+                            {case value="id|group"}{/case}
+
+                            {case value="canedit"}
+                            {if condition="$limits=='all'"}
+                            <div class="form-group">
+                            <div class="checkbox form-inline" for="{$element.COLUMN_NAME}">
+                                <label>
+
+                                    <input type="checkbox" {notempty name='sub'}{if condition="$sub['canedit']==1"}checked{/if}{/notempty} name="{$element.COLUMN_NAME}" class="form-control inline-margin" id="{$element.COLUMN_NAME}" value="1"/> {$element.COLUMN_NAME}
+
+                                </label>
+                            </div>
+                            </div>
+                            {/if}
+                            {/case}
+
+                            {default /}
+                            <div class="form-group">
+                                <label for="{$element.COLUMN_NAME}">
+                                    {$element.COLUMN_NAME}
+                                </label>
+                                {if condition="$element.IS_NULLABLE=='NO'"}
+                                <input type="text" onblur="checkInput(this)" name="{$element.COLUMN_NAME}" class="form-control" id="{$element.COLUMN_NAME}" value="{empty name='sub'}{$element.COLUMN_DEFAULT}{else /}{$sub[$element.COLUMN_NAME]}{/empty}" placeholder=""/>
+                                {else /}
+                                <input type="text" name="{$element.COLUMN_NAME}" class="form-control" id="{$element.COLUMN_NAME}" value="{empty name='sub'}{$element.COLUMN_DEFAULT}{else /}{$sub[$element.COLUMN_NAME]}{/empty}" placeholder=""/>
+                                {/if}
+                            </div>
+                            {/switch}
+                            {/volist}
+
+                            <div id="hint" class="d-none">
+                                    {if condition="$success==0"}
+                                    <div class="alert alert-danger alert-dismissible fade show">
+                                    <button type="button" class="close" data-dismiss="alert">×</button>
+                                    <strong>{$Think.lang.system_operate_fail}</strong>
+                                </div>
+                                    {else /}
+                                    <div class="alert alert-success alert-dismissible fade show">
+                                    <button type="button" class="close" data-dismiss="alert">×</button>
+                                    <strong>{$Think.lang.system_operate_success}</strong>
+                                </div>
+                                    {/if}
+                            </div>
+
+                            <button type="submit" class="btn btn-success inline-margin" onclick ="setScoll();setSid(-1);setChangeType('changetype','insert');">
+                                {$Think.lang.system_insert}
+                            </button>
+
+                            <button type="submit" class="btn btn-primary inline-margin" onclick ="setScoll();setSid(-1);setChangeType('changetype','update');">
+                                {$Think.lang.system_update}
+                            </button>
+
+                            <button type="submit" class="btn btn-danger inline-margin" onclick ="setScoll();setSid(-1);setChangeType('changetype','delete');">
+                                {$Think.lang.system_delete}
+                            </button>
+
+                            <input id="changetype" style="display: none" value="" type="text" name="changetype"/>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12 box-admin">
+        <div class="page-breadcrumbs">
+            <ul class="breadcrumb">
+                <li><h1>{$group}</h1></li>
+            </ul>
+        </div>
+        <div class="tabbable" id="tabs-172163">
+            <ul class="nav nav-tabs">
+                {volist name="subgroups" id="value" key="k"}
+                <li class="nav-item">
+                    <a id="nav-item-{$value.id}" class="nav-link" href="#tab{$value.id}" onclick="setTab('{$value.id}');" data-toggle="tab">{$value.name}</a>
+                </li>
+                {/volist}
+            </ul>
+
+            <div class="tab-content">
+                {volist name="subgroups" id="value" key="k"}
+                    <div class="tab-pane" id="tab{$value.id}">
+                        <div class="col-md-12 searchBar">
+                            <form class="form-inline" action="{:url('/adminlist',['top'=>$top,'group'=>$group,'search'=>$search])}" method="post">
+                                <label class="form-inline" for="{$value.id}-searchtype">
+                                    {$Think.lang.system_searchType}
+                                    <div class="dropdown form-control inline-margin" style="border: unset">
+                                    <button class="btn btn-primary dropdown-toggle" type="button" id="{$value.id}-dropdownMenuButton" data-toggle="dropdown">id</button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        {volist name="structtype" id="struct"}
+                                        {switch name="$struct.COLUMN_NAME" }
+                                        {case value="group|subgroup"}{/case}
+                                        {default /}
+                                        {if condition="$struct.COLUMN_NAME=='canedit' && $limits!='all'"}
+                                        {else /}
+                                        <a class="dropdown-item" href ="javascript:void(0);" onclick ="setSearchType('{$value.id}','{$struct.COLUMN_NAME}');">{$struct.COLUMN_NAME}</a>
+                                        {/if}
+                                        {/switch}
+                                        {/volist}
+                                    </div>
+                                </div>
+                                </label>
+                                <input id="{$value.id}-searchtype" style="display: none" value="id" type="text" name="filter_type"/>
+                                <input id="{$value.id}-searchtext" class="form-control mr-sm-2" type="text" name="filter_text" />
+                                <button class="btn btn-success my-2 my-sm-0 inline-margin" onclick ="setScoll();setSearchText('{$value.id}');" type="submit">
+                                    {$Think.lang.system_search}
+                                </button>
+                            </form>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div id="card-285747">
+
+                            {assign name="subgroup" value="$value.name"/}
+                            {assign name="vid" value="$value.id"/}
+                            {assign name="vedit" value="$value.canedit"/}
+
+                            {volist name="list" id="val"}
+                                {if condition="$val.subgroup==$subgroup && (($vedit==1 || $limits=='all')||$val.id!=0)"}
+                                    <div class="card">
+                                        <div class="card-header">
+                                            {if condition="$val.id==0"}
+                                            <a class="collapsed card-link" data-toggle="collapse" data-parent="#card-285747" href="#card-element-{$vid}-{$val.id}">{$Think.lang.system_new}</a>
+                                            {else /}
+                                            <a class="collapsed card-link" data-toggle="collapse" data-parent="#card-285747" href="#card-element-{$vid}-{$val.id}">id: {$val.id} name: {$val.name}</a>
+                                            {/if}
+                                        </div>
+                                        {if condition="$val.id==0"}
+                                        <div id="card-element-{$vid}-{$val.id}" class="collapse">
+                                        {else /}
+                                        <div id="card-element-{$vid}-{$val.id}" class="collapse show">
+                                            {/if}
+                                            <div class="card-body">
+                                                <form role="form" action="{:url('/adminlist/change',['top'=>$top,'group'=>$group,'subgroup'=>$subgroup,'id'=>$val.id,'table'=>'_table','search'=>$search])}" method="post">
+
+                                                    {assign name="mid" value="$val.id"/}
+                                                    {if condition="array_key_exists('canedit',$val) && $limits!='all'"}
+                                                    {assign name="canedit" value="$val.canedit"/}
+                                                    {else /}
+                                                    {assign name="canedit" value="1"/}
+                                                    {/if}
+
+                                                    {volist name="val" id="element"}
+
+                                                        {assign name="IS_NULLABLE" value="YES"/}
+                                                        {assign name="valkey" value="$key"/}
+                                                        {volist name="structtype" id="st"}
+                                                            {if condition="$st.COLUMN_NAME==$valkey && $st.IS_NULLABLE=='NO'"}
+                                                                {assign name="IS_NULLABLE" value="NO"/}
+                                                            {/if}
+                                                        {/volist}
+
+                                                    {switch name="$valkey" }
+                                                    {case value="id|group|subgroup"}{/case}
+
+                                                    {case value="email"}
+                                                    <div class="form-group">
+                                                        <label for="{$vid}-{$mid}-{$valkey}">
+                                                            {$valkey}
+                                                        </label>
+                                                        {if condition="$IS_NULLABLE=='NO'"}
+                                                        <input type="email" onblur="checkInput(this)" name="{$valkey}" class="form-control" id="{$vid}-{$mid}-{$valkey}" value="{$element}" placeholder=""/>
+                                                        {else /}
+                                                        <input type="email" name="{$valkey}" class="form-control" id="{$vid}-{$mid}-{$valkey}" value="{$element}" placeholder=""/>
+                                                        {/if}
+                                                    </div>
+                                                    {/case}
+
+                                                    {case value="password"}
+                                                    <div class="form-group">
+                                                        <label for="{$vid}-{$mid}-{$valkey}">
+                                                            {$valkey}
+                                                        </label>
+                                                        {if condition="$IS_NULLABLE=='NO'"}
+                                                        <input type="password" onblur="checkInput(this)" name="{$valkey}" class="form-control" id="{$vid}-{$mid}-{$valkey}" value="{$element}" placeholder=""/>
+                                                        {else /}
+                                                        <input type="password" name="{$valkey}" class="form-control" id="{$vid}-{$mid}-{$valkey}" value="{$element}" placeholder=""/>
+                                                        {/if}
+                                                    </div>
+                                                    {/case}
+
+                                                    {case value="canedit"}
+                                                    {if condition="$limits=='all'"}
+                                                    <div class="form-group">
+                                                    <div class="checkbox form-inline" for="{$vid}-{$mid}-{$valkey}">
+                                                        <label>
+                                                            {if condition="$element==1"}
+                                                            <input type="checkbox" checked name="{$valkey}" class="form-control inline-margin" id="{$vid}-{$mid}-{$valkey}" value="1"/> {$valkey}
+                                                            {else /}
+                                                            <input type="checkbox" name="{$valkey}" class="form-control inline-margin" id="{$vid}-{$mid}-{$valkey}" value="1"/> {$valkey}
+                                                            {/if}
+                                                        </label>
+                                                    </div>
+                                                    </div>
+                                                    {/if}
+                                                    {/case}
+
+                                                    {default /}
+                                                    <div class="form-group">
+                                                        <label for="{$vid}-{$mid}-{$valkey}">
+                                                            {$valkey}
+                                                        </label>
+                                                        {if condition="$IS_NULLABLE=='NO'"}
+                                                        <input type="text" onblur="checkInput(this)" name="{$valkey}" class="form-control" id="{$vid}-{$mid}-{$valkey}" value="{$element}" placeholder=""/>
+                                                        {else /}
+                                                        <input type="text" name="{$valkey}" class="form-control" id="{$vid}-{$mid}-{$valkey}" value="{$element}" placeholder=""/>
+                                                        {/if}
+                                                    </div>
+                                                    {/switch}
+                                                    {/volist}
+
+                                                    <div id="hint-{$vid}-{$mid}" class="d-none">
+                                                            {if condition="$success==0"}
+                                                            <div class="alert alert-danger alert-dismissible fade show">
+                                                            <button type="button" class="close" data-dismiss="alert">×</button>
+                                                            <strong>{$Think.lang.system_operate_fail}</strong>
+                                                        </div>
+                                                            {else /}
+                                                            <div class="alert alert-success alert-dismissible fade show">
+                                                            <button type="button" class="close" data-dismiss="alert">×</button>
+                                                            <strong>{$Think.lang.system_operate_success}</strong>
+                                                        </div>
+                                                            {/if}
+                                                    </div>
+
+
+                                                    {if condition="$mid==0"}
+                                                    <button type="submit" class="btn btn-success inline-margin" onclick ="setScoll();setSid({$mid});setChangeType('changetype-{$vid}-{$mid}','insert');">
+                                                        {$Think.lang.system_insert}
+                                                    </button>
+                                                    {else /}
+                                                    {if condition="$canedit==1"}
+                                                    <button type="submit" class="btn btn-primary inline-margin" onclick ="setScoll();setSid({$mid});setChangeType('changetype-{$vid}-{$mid}','update');">
+                                                        {$Think.lang.system_update}
+                                                    </button>
+
+                                                    <button type="submit" class="btn btn-danger inline-margin" onclick ="setScoll();setSid({$mid});setChangeType('changetype-{$vid}-{$mid}','delete');">
+                                                        {$Think.lang.system_delete}
+                                                    </button>
+                                                    {/if}
+                                                    {/if}
+
+                                                    <input id="changetype-{$vid}-{$mid}" style="display: none" value="" type="text" name="changetype"/>
+                                                </form>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                {/if}
+                            {/volist}
+                            </div>
+                        </div>
+                    </div>
+                {/volist}
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{/block}
+
+{block name="script"}
+    <script type="text/javascript">
+        let value = localStorage.getItem("mylist.showNew");
+        var show = (value == undefined || value == null) ? 'true' : value
+        value = localStorage.getItem("mylist.filter_type");
+        var type = (value == undefined || value == null) ? "id" : value
+        value = localStorage.getItem("mylist.filter_text");
+        var text = (value == undefined || value == null) ? "" : value
+        value = localStorage.getItem("mylist.tab");
+        var tab = (value == undefined || value == null) ? 1 : value
+        value = localStorage.getItem("mylist.scroll_pos");
+        var scroll_pos = (value == undefined || value == null) ? 0 : value
+        value = localStorage.getItem("mylist.sid");
+        var sid = (value == undefined || value == null) ? -2 : value
+
+        document.getElementById('card-element-75684').className += (show=='true'?" show":"");
+
+        if(document.getElementById('tab'+tab) != null && document.getElementById('tab'+tab) != undefined)
+        {
+            document.getElementById('tab'+tab).className += " active";
+            document.getElementById('nav-item-'+tab).className += " active show";
+            document.getElementById(tab + '-dropdownMenuButton').innerHTML = type;
+            document.getElementById(tab + '-searchtype').value = type;
+            document.getElementById(tab + '-searchtext').value = text;
+
+            if(sid==-1)
+                document.getElementById('hint').className = '';
+            else if(sid==0)
+                document.getElementById('card-element-'+tab+'-'+sid).className += ' show';
+            if(sid>=0)
+            {
+                let obj = document.getElementById('hint-'+tab+'-'+sid);
+                if(obj != undefined && obj != null)
+                    obj.className = '';
+            }
+
+            setSid(-2);
+            scoll(scroll_pos);
+        }
+
+        function setSearchType(id,type)
+        {
+            document.getElementById(id + '-dropdownMenuButton').innerHTML = type;
+            document.getElementById(id + '-searchtype').value = type;
+            localStorage.setItem("mylist.filter_type", type);
+        }
+
+        function setSearchText(id)
+        {
+            localStorage.setItem("mylist.filter_text", document.getElementById(id + '-searchtext').value);
+        }
+
+        window.parent.document.body.onbeforeunload = function()
+        {
+            let str = document.getElementById('card-element-75684').className;
+            localStorage.setItem("mylist.showNew", str.indexOf("show") >= 0?'true':'false');
+        }
+
+        function setChangeType(id,type)
+        {
+            document.getElementById(id).value = type;
+        }
+
+        function setSid(id)
+        {
+            localStorage.setItem("mylist.sid",id);
+        }
+
+        function setTab(id)
+        {
+            localStorage.setItem("mylist.tab",id);
+        }
+
+        function setScoll()
+        {
+            let pos = document.documentElement.scrollTop;
+            localStorage.setItem("mylist.scroll_pos",pos);
+        }
+
+        function scoll(pos)
+        {
+            window.scrollTo(0, pos);
+            localStorage.setItem("mylist.scroll_pos",0);
+            return false;
+        }
+
+        function checkInput(dom)
+        {
+            let name = dom.getAttribute("name");
+            if(dom.value==""|| dom.value=="empty" || dom.value==null)
+            {
+                alert(name+"不能为空和empty\n"+name+"can not be empty or null.");
+                dom.focus();
+            }
+        }
+    </script>
+{/block}

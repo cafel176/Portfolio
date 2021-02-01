@@ -1,0 +1,129 @@
+{extend name="common/base"/}
+
+{block name="content"}
+<div class="row" style="">
+    <div class="col-md-12 box-admin">
+        <div class="page-breadcrumbs">
+            <ul class="breadcrumb">
+                <li><h1>{$top}</h1></li>
+            </ul>
+        </div>
+        <form role="form" action="{:url('/groupedit/change',['top'=>$top,'group'=>$group,'search'=>$search])}" method="post">
+
+            {volist name='groups' id='vo' key="k"}
+                {if condition="$search==$k && ($vo.canedit==1 || $limits=='all')"}
+                    {assign name="gro" value="$vo"/}
+                {/if}
+            {/volist}
+
+            <label class="form-inline" for="searchName">
+                {$Think.lang.opgroup_text}
+                <div class="dropdown form-control inline-margin" style="border: unset">
+
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="searchName-dropdownMenuButton" data-toggle="dropdown">{notempty name='gro'}{$gro.name}{/notempty}</button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        {volist name="groups" id="group" key="k"}
+                        {if condition="$group.canedit==1 || $limits=='all'"}
+                        <a class="dropdown-item" href ="{:url('/groupedit',['top'=>$top,'group'=>$group,'search'=>$k])}">{$group.name}</a>
+                        {/if}
+                        {/volist}
+                    </div>
+                </div>
+            </label>
+
+            <input id="searchName" style="display: none" value="{notempty name='gro'}{$gro.name}{/notempty}" type="text" name="searchName"/>
+
+            {volist name="groupstruct" id="element" key="k"}
+            {switch name="$element.COLUMN_NAME" }
+            {case value="id"}{/case}
+
+            {case value="canedit"}
+            {if condition="$limits=='all'"}
+            <div class="form-group">
+            <div class="checkbox form-inline" for="{$element.COLUMN_NAME}">
+                <label>
+
+                    <input type="checkbox" {notempty name='gro'}{if condition="$gro['canedit']==1"}checked{/if}{/notempty} name="{$element.COLUMN_NAME}" class="form-control inline-margin" id="{$element.COLUMN_NAME}" value="1"/> {$element.COLUMN_NAME}
+
+                </label>
+            </div>
+            </div>
+            {/if}
+            {/case}
+
+            {default /}
+            <div class="form-group">
+                <label for="{$element.COLUMN_NAME}">
+                    {$element.COLUMN_NAME}
+                </label>
+                {if condition="$element.IS_NULLABLE=='NO'"}
+                <input type="text" onblur="checkInput(this)" name="{$element.COLUMN_NAME}" class="form-control" id="{$element.COLUMN_NAME}" value="{empty name='gro'}{$element.COLUMN_DEFAULT}{else /}{$gro[$element.COLUMN_NAME]}{/empty}" placeholder=""/>
+                {else /}
+                <input type="text" name="{$element.COLUMN_NAME}" class="form-control" id="{$element.COLUMN_NAME}" value="{empty name='gro'}{$element.COLUMN_DEFAULT}{else /}{$gro[$element.COLUMN_NAME]}{/empty}" placeholder=""/>
+                {/if}
+            </div>
+            {/switch}
+            {/volist}
+
+            <div id="hint" class="d-none">
+                {if condition="$success==0"}
+                <div class="alert alert-danger alert-dismissible fade show">
+                    <button type="button" class="close" data-dismiss="alert">×</button>
+                    <strong>{$Think.lang.system_operate_fail}</strong>
+                </div>
+                {elseif condition="$success==-2"/}
+                {else /}
+                <div class="alert alert-success alert-dismissible fade show">
+                    <button type="button" class="close" data-dismiss="alert">×</button>
+                    <strong>{$Think.lang.system_operate_success}</strong>
+                </div>
+                {/if}
+            </div>
+
+            <button type="submit" class="btn btn-success inline-margin" onclick ="setShow('');setChangeType('changetype','insert');">
+                {$Think.lang.system_insert}
+            </button>
+
+            <button type="submit" class="btn btn-primary inline-margin" onclick ="setShow('');setChangeType('changetype','update');">
+                {$Think.lang.system_update}
+            </button>
+
+            <button type="submit" class="btn btn-danger inline-margin" onclick ="setShow('');setChangeType('changetype','delete');">
+                {$Think.lang.system_delete}
+            </button>
+
+            <input id="changetype" style="display: none" value="" type="text" name="changetype"/>
+        </form>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+    let value = localStorage.getItem("group.show");
+    var show = (value == undefined || value == null) ? 'd-none' : value
+
+    document.getElementById('hint').className = show;
+    setShow('d-none');
+
+    function setShow(bool)
+    {
+        localStorage.setItem("group.show",bool);
+    }
+
+    function setChangeType(id,type)
+    {
+        document.getElementById(id).value = type;
+    }
+
+    function checkInput(dom)
+    {
+        let name = dom.getAttribute("name");
+        if(dom.value=="" ||dom.value=="empty" || dom.value==null)
+        {
+            alert(name+"不能为空和empty\n"+name+"can not be empty or null.");
+            dom.focus();
+        }
+    }
+</script>
+{/block}

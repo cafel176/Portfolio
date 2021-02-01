@@ -1,0 +1,76 @@
+{extend name="common/base"/}
+
+{block name="content"}
+<div class="row" style="">
+    <div class="col-md-12 box-admin">
+        <div class="page-breadcrumbs">
+            <ul class="breadcrumb">
+                <li><h1>{$Think.lang.upload_text}</h1></li>
+            </ul>
+        </div>
+        <div class="widget">
+        <div class="widget-body">
+            <div id="horizontal-form">
+                <form class="form-horizontal" role="form" action="{:url('/upload/do')}" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="InputName">
+                            {$Think.lang.upload_name}
+                        </label>
+                        <input type="text" onblur="checkInput(this);" name="name" class="form-control" id="InputName" value="empty"/>
+                    </div>
+                    <div class="form-group">
+                    <label for="InputDesc">
+                        {$Think.lang.upload_description}
+                    </label>
+                    <input type="text" name="desc" class="form-control" id="InputDesc"/>
+                    </div>
+                    {if condition="$limits=='all'"}
+                    <div class="form-group">
+                        <label for="InputLimit">
+                            {$Think.lang.upload_limit}
+                        </label>
+                        <input type="text" onblur="checkInput(this);" name="limit" class="form-control" id="InputLimit" value="0"/>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="canedit" checked value="1"/> {$Think.lang.upload_canedit}
+                        </label>
+                    </div>
+                    {/if}
+                    <div class="form-group">
+                        <label for="InputFile">
+                            {$Think.lang.upload_fileinput}
+                        </label>
+                        <input type="file" name="file" class="form-control-file" id="InputFile" />
+                    </div>
+
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="water" checked value="1"/> {$Think.lang.upload_watermark}
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        {$Think.lang.system_submit}
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+    function checkInput(dom)
+    {
+        let name = dom.getAttribute("name");
+        if(dom.value==""||dom.value=="empty" || dom.value==null)
+        {
+            alert(name+"不能为空和empty\n"+name+"can not be empty or null.");
+            dom.focus();
+        }
+    }
+</script>
+{/block}

@@ -1,0 +1,76 @@
+﻿{extend name="common/base"/}
+
+{block name="content"}
+
+    <div class="container-fluid pagecontent">
+        <div class="row-fluid space-mid"></div>
+        <div class="row-fluid">
+            <div class="row-fluid">
+                <div class="span12">
+                    <img class="cut1" alt="top-cut1" src="/__PATH__/__IMAGES__/top-cut1.png" />
+                </div>
+            </div>
+
+            <div class="row-fluid space-small"></div>
+
+            <div class="row-fluid">
+                <div class="span12">
+                    <h3 class="text-center alex title text-limit">
+                        {$Think.lang.rabbitonGames}
+                    </h3>
+                </div>
+            </div>
+
+            <div class="row-fluid space-small"></div>
+
+            <div class="row-fluid">
+                <div class="span12">
+                    <img class="pic img-thumbnail" alt="top-pic" src="{$Think.request.domain}/__IMAGES__/top-pic600.png" />
+                </div>
+            </div>
+
+            <div class="row-fluid space-mid"></div>
+
+            <div class="row-fluid">
+                <div class="span4">
+                    <button id="entre" class="btn btn-large btn-default" type="button" onclick="window.location.assign('{$Think.request.domain}/index/Common/index')"></button>
+                </div>
+            </div>
+
+            <div class="row-fluid space-small"></div>
+
+            <h3 class="text-center txt-big source text-limit">
+                {$Think.lang.nowLang}
+            </h3>
+
+            <div class="row-fluid space-small"></div>
+
+            <h3 class="text-center txt-big source text-limit">
+                Updated: 26th July,2020
+            </h3>
+
+            <div class="row-fluid space-small"></div>
+
+            <p class="text-center txt-mid source text-limit">
+                New released: The Witches' Tea party
+                <br>In development: Airi's Adventure
+            </p>
+
+            <div class="row-fluid space-mid"></div>
+
+            <div class="row-fluid">
+                <div class="span12">
+                    <img class="cut2" alt="top-cut2" src="{$Think.request.domain}/__IMAGES__/top-cut2.png" />
+                </div>
+            </div>
+
+            <div class="row-fluid space-big"></div>
+
+            <p class="text-center txt-mid source text-limit">
+                {$Think.lang.rabbitonGames}
+            </p>
+            <div class="row-fluid space-small"></div>
+        </div>
+    </div>
+
+{/block}

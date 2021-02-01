@@ -1,0 +1,40 @@
+<div id="card-998911">
+    <div class="card">
+        <div class="card-header">
+            <a class="card-link collapsed" href="{:url('/adminindex')}">{$Think.lang.left_index}</a>
+        </div>
+    </div>
+    {if condition="$limits=='all'"}
+    <div class="card">
+        <div class="card-header">
+            <a class="card-link collapsed" href="{:url('/otherlist',['top'=>$top,'group'=>$group,'listtable'=>'top'])}">{$Think.lang.left_operate}</a>
+        </div>
+    </div>
+    {/if}
+    {volist name="leftdata" id="value" key="k"}
+    <div class="card">
+        <div class="card-header">
+            <a class="card-link collapsed" data-toggle="collapse" data-parent="#card-998911" href="#card-element-{$k}">{$key}</a>
+        </div>
+
+        {if condition="$top == $key"}
+        <div id="card-element-{$k}" class="collapse show">
+        {else /}
+        <div id="card-element-{$k}" class="collapse">
+        {/if}
+
+        {assign name="mtop" value="$key"/}
+        {volist name="value" id="val"}
+            <div class="card-body">
+                {if condition="$val.id==-1"}
+                <a class="card-link" href="{:url('/groupedit',['top'=>$mtop,'group'=>$val.name,'success'=>-2,'search'=>1])}">{$val.name}</a>
+                {else /}
+                <a class="card-link" href="{:url('/adminlist',['top'=>$mtop,'group'=>$val.name,'success'=>-2,'search'=>1])}">{$val.name}</a>
+                {/if}
+            </div>
+        {/volist}
+        </div>
+    </div>
+    {/volist}
+</div>
+

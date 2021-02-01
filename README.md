@@ -5,6 +5,10 @@ Different users have different priorities。<br>
 <b>Name:</b> admin  <b>Password:</b> password   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  to login as the main administrator<br>
 <b>Name:</b> guest  <b>Password:</b> guest  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  to login as a guest<br>
 <a href="https://cafel.edinburgh.domains/portfolio/public/admin"><b>Click here to visit</b></a><br/>
+
+Besides, another project, a web game made by Cocos Creator is here. <br/>
+<a href="https://github.com/cafel176/CanvasBall"><b>Click here to visit</b></a><br/>
+
 <br>
 I mainly use jquery and bootstrap to build the HTML web page.<br>
 Use HTML, CSS, javascript in these pages.<br>

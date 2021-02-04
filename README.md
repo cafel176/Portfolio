@@ -16,7 +16,7 @@ Use HTML, CSS, javascript in these pages.<br>
 <br>
 <br>
 For the server, I mainly use thinkphp5 to build it.<br>
-PHP is used to handle the post and get a request from HTML.<br>
+PHP is used to handle the post and get requests from HTML.<br>
 I also use MySQL to store the data from HTML, and users can also use a web page to edit the data. <br>
 ![图2](pic/2.png)
 ![图3](pic/3.png)

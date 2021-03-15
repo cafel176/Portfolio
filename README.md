@@ -1,5 +1,5 @@
 # Portfolio
-采用thinkphp的带后台管理系统的个人作品集展示网站<br>
+采用thinkphp的个人作品集展示网站的后台管理系统<br>
 不同的管理用户权限不同，以下为两个测试账号<br>
 <b>用户名:</b> admin  <b>密码:</b> password   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  主管理员<br>
 <b>用户名:</b> guest  <b>密码:</b> guest  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  访客<br>
